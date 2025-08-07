@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, Request
 import openai
 import uvicorn
@@ -7,7 +8,7 @@ app = FastAPI()
 # ✅ 본인의 OpenAI API 키 입력
 openai.api_key = "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"
 
-@app.post("/gpt-webhook")
+@app.post("/message")
 async def gpt_kakao(req: Request):
     data = await req.json()
     user_input = data['userRequest']['utterance']
@@ -38,5 +39,6 @@ async def gpt_kakao(req: Request):
         }
     }
 
-# ⛔ 이 아래는 실행 명령줄에서 실행해야 합니다. (터미널에서)
-# uvicorn gpt_kakao_server:app --reload --port 8000
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
